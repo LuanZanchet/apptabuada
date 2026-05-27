@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tabuada Master - Aprenda e Pratique de Forma Divertida</title>
+    <meta name="description" content="Domine a tabuada de 1 a 10 com nossa plataforma interativa e teste seus conhecimentos com o quiz rápido com histórico de pontuação.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <span class="logo-icon">⚡</span>
+                <h1>Tabuada <span class="gradient-text">Master</span></h1>
+            </div>
+            <p class="subtitle">Aprenda, pratique e domine a matemática!</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-content">
+            
+            <!-- SECTION 1: ESTUDAR (STUDY) -->
+            <section id="sec-study" class="content-section active">
+                <div class="section-header">
+                    <h2>🎯 Estude a Tabuada</h2>
+                    <p>Selecione um número para ver a tabuada detalhada.</p>
+                </div>
+                
+                <!-- Quick selectors (1 to 10 grids) -->
+                <div class="grid-numbers">
+                    <!-- Dynamic numbers 1-10 will be generated here -->
+                </div>
+
+                <!-- Featured Active Table view -->
+                <div class="active-table-card card glass">
+                    <div class="table-card-header">
+                        <span class="table-card-title">Tabuada do <span id="current-table-num">5</span></span>
+                        <button id="btn-listen" class="btn-icon" aria-label="Ouvir Tabuada" title="Ouvir Tabuada">🔊</button>
+                    </div>
+                    <div id="table-entries" class="table-entries-grid">
+                        <!-- Dynamic multiplication lines will go here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: TREINAR (QUIZ) -->
+            <section id="sec-quiz" class="content-section">
+                
+                <!-- Quiz Startup Screen -->
+                <div id="quiz-start-screen" class="quiz-panel active">
+                    <div class="quiz-intro-card card glass">
+                        <div class="quiz-badge">🏆 DESAFIO</div>
+                        <h2>Pronto para o Teste?</h2>
+                        <p>O desafio consiste em <strong>10 questões aleatórias</strong> de multiplicação de 1 a 10.</p>
+                        
+                        <div class="quiz-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">⏱️</span>
+                                <div>
+                                    <h3>Sem Tempo Limite</h3>
+                                    <p>Responda no seu ritmo com precisão.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">📊</span>
+                                <div>
+                                    <h3>Salvar Resultados</h3>
+                                    <p>Acompanhe sua evolução no Histórico.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btn-start-quiz" class="btn btn-primary btn-block">
+                            Iniciar Desafio 🚀
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Quiz Screen -->
+                <div id="quiz-active-screen" class="quiz-panel">
+                    <div class="card glass quiz-play-card">
+                        <!-- Progress Area -->
+                        <div class="quiz-progress-wrapper">
+                            <div class="progress-labels">
+                                <span class="progress-text">Questão <strong id="current-question-index">1</strong> de <strong>10</strong></span>
+                                <span class="progress-score">Acertos: <strong id="current-correct-count" class="correct-highlight">0</strong></span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div id="quiz-progress-bar" class="progress-bar-fill" style="width: 10%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question Area -->
+                        <div class="quiz-question-box">
+                            <span id="quiz-num1" class="question-num">7</span>
+                            <span class="question-op">×</span>
+                            <span id="quiz-num2" class="question-num">8</span>
+                            <span class="question-eq">=</span>
+                            <span class="question-q">?</span>
+                        </div>
+
+                        <!-- Answer input & feedback -->
+                        <div class="quiz-input-wrapper">
+                            <input type="number" id="quiz-answer-input" inputmode="numeric" pattern="[0-9]*" placeholder="Sua resposta" autocomplete="off" required>
+                            <button id="btn-submit-answer" class="btn btn-accent btn-block">Confirmar Resposta ➔</button>
+                        </div>
+                        
+                        <div id="quiz-feedback" class="feedback-msg hidden">
+                            <!-- Correct / Incorrect animated message -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Results / Success Screen -->
+                <div id="quiz-result-screen" class="quiz-panel">
+                    <div class="card glass quiz-result-card">
+                        <div id="result-emoji" class="result-celebration-emoji">🎉</div>
+                        <h2 id="result-title">Excelente Trabalho!</h2>
+                        <p id="result-subtitle">Você completou o desafio da tabuada.</p>
+                        
+                        <!-- Score Display Circle -->
+                        <div class="score-circle">
+                            <span class="score-val" id="result-score">9.0</span>
+                            <span class="score-lbl">Nota Final</span>
+                        </div>
+
+                        <!-- Quick Statistics List -->
+                        <div class="result-stats">
+                            <div class="stat-box">
+                                <span class="stat-icon correct-highlight">✓</span>
+                                <span class="stat-value" id="result-correct">9</span>
+                                <span class="stat-label">Acertos</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-icon error-highlight">✗</span>
+                                <span class="stat-value" id="result-wrong">1</span>
+                                <span class="stat-label">Erros</span>
+                            </div>
+                        </div>
+
+                        <div class="quiz-actions-row">
+                            <button id="btn-restart-quiz" class="btn btn-primary">Tentar Novamente 🔄</button>
+                            <button id="btn-go-history" class="btn btn-secondary">Ver Histórico 📊</button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- SECTION 3: HISTÓRICO (HISTORY) -->
+            <section id="sec-history" class="content-section">
+                <div class="section-header">
+                    <h2>📊 Seu Desempenho</h2>
+                    <p>Acompanhe seu progresso e histórico de notas.</p>
+                </div>
+
+                <!-- Stats summary cards -->
+                <div class="stats-overview">
+                    <div class="stat-overview-card card glass">
+                        <span class="overview-lbl">Média Geral</span>
+                        <span class="overview-val" id="stats-avg-score">0.0</span>
+                    </div>
+                    <div class="stat-overview-card card glass">
+                        <span class="overview-lbl">Testes Feitos</span>
+                        <span class="overview-val" id="stats-total-tests">0</span>
+                    </div>
+                    <div class="stat-overview-card card glass">
+                        <span class="overview-lbl">Aproveitamento</span>
+                        <span class="overview-val" id="stats-success-rate">0%</span>
+                    </div>
+                </div>
+
+                <div class="history-list-wrapper card glass">
+                    <div class="history-header">
+                        <h3>📋 Histórico de Provas</h3>
+                        <button id="btn-clear-history" class="btn-text">Limpar Tudo</button>
+                    </div>
+                    
+                    <div id="history-empty" class="history-empty-state">
+                        <span class="empty-icon">📝</span>
+                        <p>Nenhuma prova realizada ainda. Vá para a aba "Treinar" e faça seu primeiro teste!</p>
+                    </div>
+
+                    <div id="history-items" class="history-items-list hidden">
+                        <!-- Dynamic history cards go here -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Navigation Bar (Bottom Tabs for Mobile reachability) -->
+        <nav class="app-navbar">
+            <button class="nav-item active" data-target="sec-study">
+                <span class="nav-icon">📖</span>
+                <span class="nav-label">Estudar</span>
+            </button>
+            <button class="nav-item" data-target="sec-quiz">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-label">Treinar</span>
+            </button>
+            <button class="nav-item" data-target="sec-history">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Histórico</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Script connection -->
+    <script src="app.js"></script>
+</body>
+</html>
