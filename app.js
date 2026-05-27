@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeTab: 'sec-study',
         quiz: {
             isActive: false,
+            difficulty: 'facil',
             questions: [],
             currentIndex: 0,
             correctCount: 0,
@@ -55,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultScoreText = document.getElementById('result-score');
     const resultCorrectText = document.getElementById('result-correct');
     const resultWrongText = document.getElementById('result-wrong');
+    
+    // Difficulty Elements
+    const diffButtons = document.querySelectorAll('.diff-btn');
+    const diffDesc = document.getElementById('difficulty-desc');
     
     // Stats & History Elements
     const statsAvgScore = document.getElementById('stats-avg-score');
@@ -186,6 +191,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // === DIFFICULTY SELECTION ===
+    const diffDescriptions = {
+        facil: 'Qualquer conta de 1 a 10 sem restrições.',
+        medio: 'Sem as tabuadas do 1 e do 10 e excluindo multiplicações por 1 e 10.',
+        dificil: 'Sem as tabuadas do 1, 2, 3 e 10 e excluindo multiplicações por 1, 2, 3 e 10.'
+    };
+
+    diffButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const level = btn.getAttribute('data-level');
+            
+            // Update active style
+            diffButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Save state & update text
+            state.quiz.difficulty = level;
+            diffDesc.textContent = diffDescriptions[level];
+        });
+    });
+
     // === QUIZ ENGINE ===
     btnStartQuiz.addEventListener('click', startQuiz);
     btnRestartQuiz.addEventListener('click', startQuiz);
@@ -218,9 +244,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function generateQuizQuestions() {
         const pool = [];
-        // Generate all possible questions
+        const difficulty = state.quiz.difficulty || 'facil';
+
+        // Generate all possible questions based on difficulty filters
         for (let i = 1; i <= 10; i++) {
             for (let j = 1; j <= 10; j++) {
+                if (difficulty === 'medio') {
+                    // Exclude times tables of 1 and 10, and also multiplying by 1 or 10
+                    if (i === 1 || i === 10 || j === 1 || j === 10) {
+                        continue;
+                    }
+                } else if (difficulty === 'dificil') {
+                    // Exclude times tables of 1, 2, 3 and 10, and also multiplying by 1, 2, 3 or 10
+                    if (i === 1 || i === 2 || i === 3 || i === 10 || j === 1 || j === 2 || j === 3 || j === 10) {
+                        continue;
+                    }
+                }
                 pool.push({ num1: i, num2: j, answer: i * j });
             }
         }
@@ -346,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
             score: finalScore,
             correct: state.quiz.correctCount,
-            wrong: state.quiz.wrongCount
+            wrong: state.quiz.wrongCount,
+            difficulty: state.quiz.difficulty || 'facil'
         };
 
         state.history.unshift(newRecord); // Prepend to history
@@ -407,9 +447,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 badgeClass = 'score-badge-mid';
             }
 
+            const diffLabels = {
+                facil: '<span class="diff-tag tag-facil">Fácil</span>',
+                medio: '<span class="diff-tag tag-medio">Médio</span>',
+                dificil: '<span class="diff-tag tag-dificil">Difícil</span>'
+            };
+            const diffLabel = diffLabels[item.difficulty || 'facil'] || '';
+
             row.innerHTML = `
                 <div class="history-row-details">
-                    <span class="history-date">${item.date}</span>
+                    <span class="history-date">${item.date} ${diffLabel}</span>
                     <span class="history-stats-sub">${item.correct} acertos, ${item.wrong} erros</span>
                 </div>
                 <div class="history-score-badge ${badgeClass}">
